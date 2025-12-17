@@ -62,6 +62,7 @@ public class ProductsController
     }
 
     @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Product addProduct(@RequestBody Product product)
     {
@@ -71,6 +72,11 @@ public class ProductsController
         }
         catch(Exception ex)
         {
+            System.out.println("==========================================");
+            System.out.println("ADD PRODUCT ERROR: " + ex.getMessage());
+            System.out.println("Error type: " + ex.getClass().getName());
+            ex.printStackTrace();
+            System.out.println("==========================================");
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
     }
@@ -81,7 +87,7 @@ public class ProductsController
     {
         try
         {
-            productDao.create(product);
+            productDao.update(id, product);
         }
         catch(Exception ex)
         {
