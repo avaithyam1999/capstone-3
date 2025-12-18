@@ -27,7 +27,7 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
                 "WHERE (category_id = ? OR ? = -1) " + //search category
                 "   AND (price >= ? OR ? = -1) " + //min
                 "   AND (price <= ? OR ? = -1) " + //max
-                "   AND (subcategory = ? OR ? = '') ";
+                "   AND (subCategory = ? OR ? = '') ";
 
         categoryId = categoryId == null ? -1 : categoryId;
         minPrice = minPrice == null ? new BigDecimal("-1") : minPrice;
@@ -164,7 +164,7 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
                 "   , price = ? " +
                 "   , category_id = ? " +
                 "   , description = ? " +
-                "   , subcategory = ? " +
+                "   , subCategory = ? " +
                 "   , image_url = ? " +
                 "   , stock = ? " +
                 "   , featured = ? " +
@@ -192,19 +192,25 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
     }
 
     @Override
-    public void delete(int productId)
+    public void delete(int categoryId)
     {
 
-        String sql = "DELETE FROM products " +
+        String deleteProducts = "DELETE FROM products " +
                 " WHERE product_id = ?;";
+        String deleteCategory = "DELETE FROM categories where category_id = ?";
 
         try (Connection connection = getConnection())
         {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, productId);
-
-            statement.executeUpdate();
+            try (PreparedStatement statement1 = connection.prepareStatement(deleteProducts)) {
+                statement1.setInt(1, categoryId);
+                statement1.executeUpdate();
+            }
+            try (PreparedStatement statement2 = connection.prepareStatement(deleteCategory)) {
+                statement2.setInt(1, categoryId);
+                statement2.executeUpdate();
+            }
         }
+
         catch (SQLException e)
         {
             throw new RuntimeException(e);
