@@ -1,5 +1,6 @@
 package org.yearup.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ public class ShoppingCartController {
     private UserDao userDao;
     private ProductDao productDao;
 
+    @Autowired
     public ShoppingCartController(ShoppingCartDao shoppingCartDao, UserDao userDao, ProductDao productDao) {
         this.shoppingCartDao = shoppingCartDao;
         this.userDao = userDao;
@@ -31,6 +33,7 @@ public class ShoppingCartController {
     }
 
     // each method in this controller requires a Principal object as a parameter
+    @GetMapping
     public ShoppingCart getCart(Principal principal) {
         try {
             // get the currently logged in username
@@ -72,9 +75,23 @@ public class ShoppingCartController {
             User user = userDao.getByUserName(userName);
             int userId = user.getId();
 
-            shoppingCartDao.clearCart(userId);
+            shoppingCartDao.updateItem(userId, productId, dto.getQuantity());
 
             return shoppingCartDao.getByUserId(userId);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+        }
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void clearCart(Principal principal) {
+        try {
+            String userName = principal.getName();
+            User user = userDao.getByUserName(userName);
+            int userId = user.getId();
+
+            shoppingCartDao.clearCart(userId);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
@@ -85,6 +102,10 @@ public class ShoppingCartController {
 
         public UpdateQuantityDto(int quantity) {
             this.quantity = quantity;
+        }
+
+        public int getQuantity() {
+            return quantity;
         }
 
         public void setQuantity(int quantity) {
