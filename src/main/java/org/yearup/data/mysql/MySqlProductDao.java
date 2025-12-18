@@ -24,9 +24,9 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
         List<Product> products = new ArrayList<>();
 
         String sql = "SELECT * FROM products " +
-                "WHERE (category_id = ? OR ? = -1) " +
-                "   AND (price >= ? OR ? = -1) " +
-                "   AND (price <= ? OR ? = -1) " +
+                "WHERE (category_id = ? OR ? = -1) " + //search category
+                "   AND (price >= ? OR ? = -1) " + //min
+                "   AND (price <= ? OR ? = -1) " + //max
                 "   AND (subcategory = ? OR ? = '') ";
 
         categoryId = categoryId == null ? -1 : categoryId;
