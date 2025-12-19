@@ -41,6 +41,22 @@ for organizing products, products for the product catalog, shopping_cart for car
 and order_line_items for individual items within each order.
 
 # Notable Code
+I chose to implement the shopping cart and user profile features. I wanted the API to feel more functional like a real 
+website a user would want to use. 
+
+The **shopping cart** was one of the more technically challenging areas. It required handling several edge cases, such as 
+adding the same product multiple times, ensuring users could only access their own cart data, and persisting cart 
+contents across sessions. Solving these problems involved a mix of database design decisions, SQL logic, and security 
+considerations, and it helped reinforce how small design choices can impact overall system behavior.
+
+The **profile system** complements the rest of the application by separating authentication data from user-specific 
+information. This made it easier to manage user data while keeping the security model clean. Together, the cart and 
+profile features move the project closer to a practical e-commerce backend, rather than a collection of isolated 
+endpoints.
+![MySQLShoppingCartDAO add item method](images/MySQLShoppingDAOpic.png)
+![MySQLProfileDAO create profile method](images/MySQLProfileDAOpic.png)
+
+
 
 
 
