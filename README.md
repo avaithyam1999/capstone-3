@@ -23,7 +23,7 @@ filters should be ignored.
 When admins updated a product, it created a duplicate instead of updating the original. The UPDATE statement was 
 missing the WHERE clause to specify which product to update. Added WHERE product_id = ? and the problem was solved.
 ### Shopping Cart
-I built the shopping cart system from the ground up. Users can view their cart, add products, update quantities, or 
+Users can view their cart, add products, update quantities, or 
 clear the cart entirely. Cart data is stored in the database, so it persists even after logging out.
 
 The ShoppingCartController includes four endpoints: a GET request to view the cart, POST to add items, PUT to update 
