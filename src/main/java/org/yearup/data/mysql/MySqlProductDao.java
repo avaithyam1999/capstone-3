@@ -23,7 +23,7 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
     {
         List<Product> products = new ArrayList<>();
 
-        String sql = "SELECT * FROM products " +
+        String sql = "SELECT DISTINCT * FROM products " +
                 "WHERE (category_id = ? OR ? = -1) " + //search category
                 "   AND (price >= ? OR ? = -1) " + //min
                 "   AND (price <= ? OR ? = -1) " + //max
@@ -67,7 +67,7 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
     {
         List<Product> products = new ArrayList<>();
 
-        String sql = "SELECT * FROM products " +
+        String sql = "SELECT DISTINCT * FROM products " +
                     " WHERE category_id = ? ";
 
         try (Connection connection = getConnection())
@@ -195,8 +195,7 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
     public void delete(int categoryId)
     {
 
-        String deleteProducts = "DELETE FROM products " +
-                " WHERE product_id = ?;";
+        String deleteProducts = "DELETE FROM products where product_id = ?;";
         String deleteCategory = "DELETE FROM categories where category_id = ?";
 
         try (Connection connection = getConnection())
